@@ -26,8 +26,11 @@ For a USB camera
 For a Raspberry Pi camera
 
     libcamera-vid -t 0 --inline -o - | ffmpeg -i pipe: -c copy -f rtsp rtsp://localhost:8554/mystream
+    
+or with some parameters
 
+    libcamera-vid -t 0 --vflip --exposure sport --inline -o - | ffmpeg -i pipe: -c copy -f rtsp rtsp://localhost:8554/mystream
 
-## Finaly result
+## Final result
 
 We hope to have some configurable container that would fix previously mentioned work in progress. Any work work should go in the Dockerfile mentioned in this repo.
