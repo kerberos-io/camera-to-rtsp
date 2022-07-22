@@ -9,7 +9,7 @@ This project is initiated due to following issue [New Kerberos Agent: Plans for 
 
 The idea of this container is that a camera stream `/dev/video0` or others are converted to a RTSP stream using the [rtsp-simple-server project](https://github.com/aler9/rtsp-simple-server). 
 
-As of now we have the idea, to have a container with its base pointing to `aler9/rtsp-simple-server` and by pass through different arguments `type`, `deviceid` and/or others we would be able to chance the relevant video device to RTSP stream. 
+As of now we have the idea, to have a container with its base pointing to `aler9/rtsp-simple-server` and by pass through different arguments `type`, `deviceid` and/or others we would be able to change the relevant video device to RTSP stream. 
 
 As mentioned [in this issue](https://github.com/kerberos-io/agent/issues/35) we already have a working approach but this definetly not something for production (doesn't have recover or healthchecks) and it requires seperate commands to be executed:
 
