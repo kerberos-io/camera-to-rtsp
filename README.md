@@ -15,6 +15,8 @@ As mentioned [in this issue](https://github.com/kerberos-io/agent/issues/35) we 
 
 1. Start the `rtsp-simple-server` container:
 
+Run following container with host network.
+
     docker run -d --network=host aler9/rtsp-simple-server
 
 2. Depending on the camera, inject the camera stream using the correct library.
