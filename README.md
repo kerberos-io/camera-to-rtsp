@@ -5,34 +5,56 @@ The goal of this project is convert any camera to a RTSP stream, which then can 
 This project is initiated due to following issue [New Kerberos Agent: Plans for USBCamera and Raspberry PI camera #35
 ](https://github.com/kerberos-io/agent/issues/35). Read more at the previous link to understand better the context.
 
-## Work in progress
+## Side car
 
-The idea of this container is that a camera stream `/dev/video0` or others are converted to a RTSP stream using the [rtsp-simple-server project](https://github.com/aler9/rtsp-simple-server). 
+The approach we are following is to convert the camera stream of an USB, RPi or any other camera into a h264 encoded stream. Once done you'll be able to integrate that stream with the [Kerberos Agent](https://github.com/kerberos-io/agent).
 
-As of now we have the idea, to have a container with its base pointing to `aler9/rtsp-simple-server` and by pass through different arguments `type`, `deviceid` and/or others we would be able to change the relevant video device to RTSP stream. 
+So to conclude next to running the Kerberos Agent container, you'll need to run a side car container which will translate your camera specific stream into a readable h264 RTSP connection.
 
-As mentioned [in this issue](https://github.com/kerberos-io/agent/issues/35) we already have a working approach but this definetly not something for production (doesn't have recover or healthchecks) and it requires seperate commands to be executed:
+## RTSP Simple Server
 
-1. Start the `rtsp-simple-server` container:
+We are leveraging the [rtsp-simple-server](https://github.com/aler9/rtsp-simple-server) from [@alert9](https://github.com/aler9) to run as our side car container, as the project supports the majority of plugins for USB and RPi cameras.
 
-Run following container with host network.
+To run the side container run following Docker command.
 
-    docker run -d --network=host aler9/rtsp-simple-server
+    docker run --rm -it --network=host -v $PWD/rtsp-simple-server.yml:/rtsp-simple-server.yml aler9/rtsp-simple-server
 
-2. Depending on the camera, inject the camera stream using the correct library.
+Depending on which camera you are using, you might need to tweak the configuration, `rtsp-simple-server.yml`, to meet your needs. You could require additional settings if you are using a Raspberry Pi or USB camera.
 
-For a USB camera
+### Raspberry Pi camera
 
-    ffmpeg -f v4l2 -i /dev/video1 -preset ultrafast -b:v 600k  -c:v libx264 -f rtsp rtsp://localhost:8554/mystream
+To activate the Raspberry Pi camera stream, make sure [to review the Raspberry Pi camera section](https://github.com/aler9/rtsp-simple-server#from-a-raspberry-pi-camera).
 
-For a Raspberry Pi camera
+You'll find the relevant configuration settings (hflip, vlip, etc) in [the sample `rtsp-simple-server.yml`](https://github.com/aler9/rtsp-simple-server/blob/main/rtsp-simple-server.yml#L230) configuration file.
 
-    libcamera-vid -t 0 --inline -o - | ffmpeg -i pipe: -c copy -f rtsp rtsp://localhost:8554/mystream
-    
-or with some parameters
 
-    libcamera-vid -t 0 --vflip --exposure sport --inline -o - | ffmpeg -i pipe: -c copy -f rtsp rtsp://localhost:8554/mystream
+    docker run --rm -it \
+    --network=host \
+    --privileged \
+    --tmpfs /dev/shm:exec \
+    -v /usr:/usr:ro \
+    -v /lib:/lib:ro \
+    -v /run/udev:/run/udev:ro \
+    -e RTSP_PATHS_CAM_SOURCE=rpiCamera \
+    aler9/rtsp-simple-server
 
-## Final result
 
-We hope to have some configurable container that would fix previously mentioned work in progress. Any work work should go in the Dockerfile mentioned in this repo.
+### USB camera
+
+The same should be done if you are using a "simple" USB camera. Please [follow the `webcam` section](https://github.com/aler9/rtsp-simple-server#from-a-webcam) to understand which settings to enabled to forward a `/dev/video` device.
+
+In the case of webcam, ffmpeg will be used to encode the camera to a h264 stream. Adapt the `rtsp-simple-server.yml` as following:
+
+    paths:
+    cam:
+        runOnInit: ffmpeg -f v4l2 -i /dev/video0 -pix_fmt yuv420p -preset ultrafast -b:v 600k -f rtsp rtsp://localhost:$RTSP_PORT/$RTSP_PATH
+        runOnInitRestart: yes
+
+Run the container with the configuration as following.
+
+    docker run --rm -it --network=host -v $PWD/rtsp-simple-server.yml:/rtsp-simple-server.yml aler9/rtsp-simple-server
+
+
+
+
+
