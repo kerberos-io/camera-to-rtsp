@@ -13,7 +13,7 @@ So to conclude next to running the Kerberos Agent container, you'll need to run 
 
 ## RTSP Simple Server
 
-We are leveraging the [rtsp-simple-server](https://github.com/aler9/rtsp-simple-server) from [@alert9](https://github.com/aler9) to run as our side car container, as the project supports the majority of plugins for USB and RPi cameras.
+We are leveraging the [rtsp-simple-server](https://github.com/aler9/rtsp-simple-server) from [@alert9](https://github.com/aler9) to run as a side car container. The project supports the majority of plugins for USB and RPi cameras, and allows us to avoid supporting and maintaining those integrations.
 
 To run the side container run following Docker command.
 
