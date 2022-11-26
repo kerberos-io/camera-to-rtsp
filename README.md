@@ -27,6 +27,18 @@ To activate the Raspberry Pi camera stream, make sure [to review the Raspberry P
 
 You'll find the relevant configuration settings (hflip, vlip, etc) in [the sample `rtsp-simple-server.yml`](https://github.com/aler9/rtsp-simple-server/blob/main/rtsp-simple-server.yml#L230) configuration file.
 
+    paths:
+        rpicam:
+            source: rpiCamera
+            # ID of the camera
+            #rpiCameraCamID: 0
+            
+            # width of frames
+            #rpiCameraWidth: 1920
+            # ... for more fields check the template rtsp-simple-server.yml in this repo.
+
+
+Attach the `rtsp-simple-server.yml` and run the docker command.
 
     docker run --rm -it \
     --network=host \
@@ -35,9 +47,10 @@ You'll find the relevant configuration settings (hflip, vlip, etc) in [the sampl
     -v /usr:/usr:ro \
     -v /lib:/lib:ro \
     -v /run/udev:/run/udev:ro \
-    -e RTSP_PATHS_CAM_SOURCE=rpiCamera \
+    -v $PWD/rtsp-simple-server.yml:/rtsp-simple-server.yml
     aler9/rtsp-simple-server
 
+The stream will be exposed on `http://localhost:8554/rpicam`.
 
 ### USB camera
 
@@ -46,15 +59,13 @@ The same should be done if you are using a "simple" USB camera. Please [follow t
 In the case of webcam, ffmpeg will be used to encode the camera to a h264 stream. Adapt the `rtsp-simple-server.yml` as following:
 
     paths:
-    cam:
-        runOnInit: ffmpeg -f v4l2 -i /dev/video0 -pix_fmt yuv420p -preset ultrafast -b:v 600k -f rtsp rtsp://localhost:$RTSP_PORT/$RTSP_PATH
-        runOnInitRestart: yes
+        usbcam:
+            runOnInit: ffmpeg -f v4l2 -i /dev/video0 -preset ultrafast -c:v libx264 -f rtsp rtsp://localhost:$RTSP_PORT/$RTSP_PATH
+            runOnInitRestart: yes
 
 Run the container with the configuration as following.
 
-    docker run --rm -it --network=host -v $PWD/rtsp-simple-server.yml:/rtsp-simple-server.yml aler9/rtsp-simple-server
+    docker run --rm -it --network=host -v $PWD/rtsp-simple-server.yml:/rtsp-simple-server.yml kerberos/rtsp-simple-server
 
 
-
-
-
+The stream will be exposed on `http://localhost:8554/usbcam`.
