@@ -40,9 +40,8 @@ You'll find the relevant configuration settings (hflip, vlip, etc) in [the sampl
 
 Attach the `rtsp-simple-server.yml` and run the docker command.
 
-    docker run --rm -it \
-    --network=host \
-    --privileged \
+    docker run --network=host \
+    -d --privileged \
     --tmpfs /dev/shm:exec \
     -v /usr:/usr:ro \
     -v /lib:/lib:ro \
