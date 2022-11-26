@@ -65,7 +65,10 @@ In the case of webcam, ffmpeg will be used to encode the camera to a h264 stream
 
 Run the container with the configuration as following.
 
-    docker run --rm -it --network=host -v $PWD/rtsp-simple-server.yml:/rtsp-simple-server.yml kerberos/rtsp-simple-server
-
+    docker run --rm -it \
+    --network=host \
+    --privileged \
+    -v $PWD/rtsp-simple-server.yml:/rtsp-simple-server.yml
+    kerberos/rtsp-simple-server
 
 The stream will be exposed on `http://localhost:8554/usbcam`.
