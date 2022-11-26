@@ -47,7 +47,7 @@ Attach the `rtsp-simple-server.yml` and run the docker command.
     -v /usr:/usr:ro \
     -v /lib:/lib:ro \
     -v /run/udev:/run/udev:ro \
-    -v $PWD/rtsp-simple-server.yml:/rtsp-simple-server.yml
+    -v $PWD/rtsp-simple-server.yml:/rtsp-simple-server.yml \
     kerberos/rtsp-simple-server
 
 The stream will be exposed on `http://localhost:8554/rpicam`.
@@ -68,7 +68,7 @@ Run the container with the configuration as following.
     docker run --rm -it \
     --network=host \
     --privileged \
-    -v $PWD/rtsp-simple-server.yml:/rtsp-simple-server.yml
+    -v $PWD/rtsp-simple-server.yml:/rtsp-simple-server.yml \
     kerberos/rtsp-simple-server
 
 The stream will be exposed on `http://localhost:8554/usbcam`.
