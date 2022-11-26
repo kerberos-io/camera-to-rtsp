@@ -48,7 +48,7 @@ Attach the `rtsp-simple-server.yml` and run the docker command.
     -v /lib:/lib:ro \
     -v /run/udev:/run/udev:ro \
     -v $PWD/rtsp-simple-server.yml:/rtsp-simple-server.yml
-    aler9/rtsp-simple-server
+    kerberos/rtsp-simple-server
 
 The stream will be exposed on `http://localhost:8554/rpicam`.
 
