@@ -59,7 +59,7 @@ In the case of webcam, ffmpeg will be used to encode the camera to a h264 stream
 
     paths:
         usbcam:
-            runOnInit: ffmpeg -f v4l2 -i /dev/video0 -preset ultrafast -c:v libx264 -f rtsp rtsp://localhost:$RTSP_PORT/$RTSP_PATH
+            runOnInit: ffmpeg -f v4l2 -i /dev/video0 -preset ultrafast -c:v libx264 -x264-params keyint=60:scenecut=0 -f rtsp rtsp://<my_ip>:$RTSP_PORT/$RTSP_PATH
             runOnInitRestart: yes
 
 Run the container with the configuration as following.
