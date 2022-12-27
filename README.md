@@ -39,15 +39,14 @@ You'll find the relevant configuration settings (hflip, vlip, etc) in [the sampl
 
 
 Attach the `rtsp-simple-server.yml` and run the docker command.
-
-    docker run --network=host \
-    -d --privileged \
+    
+    docker run --rm -it \
+    --network=host \
+    --privileged \
     --tmpfs /dev/shm:exec \
-    -v /usr:/usr:ro \
-    -v /lib:/lib:ro \
     -v /run/udev:/run/udev:ro \
-    -v $PWD/rtsp-simple-server.yml:/rtsp-simple-server.yml \
-    kerberos/rtsp-simple-server
+    -e RTSP_PATHS_CAM_SOURCE=rpiCamera \
+    kerberos/rtsp-simple-server:latest-rpi
 
 The stream will be exposed on `rtsp://localhost:8554/rpicam`.
 
@@ -67,7 +66,7 @@ Run the container with the configuration as following.
     docker run --network=host \
     -d --privileged \
     -v $PWD/rtsp-simple-server.yml:/rtsp-simple-server.yml \
-    kerberos/rtsp-simple-server
+    kerberos/rtsp-simple-server:latest
 
 The stream will be exposed on `rtsp://localhost:8554/usbcam`.
 
