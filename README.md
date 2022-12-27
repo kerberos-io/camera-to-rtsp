@@ -45,7 +45,7 @@ Attach the `rtsp-simple-server.yml` and run the docker command.
     --privileged \
     --tmpfs /dev/shm:exec \
     -v /run/udev:/run/udev:ro \
-    -e RTSP_PATHS_CAM_SOURCE=rpiCamera \
+    -d --restart-always \
     kerberos/rtsp-simple-server:latest-rpi
 
 The stream will be exposed on `rtsp://localhost:8554/rpicam`.
@@ -64,8 +64,8 @@ In the case of webcam, ffmpeg will be used to encode the camera to a h264 stream
 Run the container with the configuration as following.
 
     docker run --network=host \
-    -d --privileged \
     -v $PWD/rtsp-simple-server.yml:/rtsp-simple-server.yml \
+    -d --privileged --restart-always \
     kerberos/rtsp-simple-server:latest
 
 The stream will be exposed on `rtsp://localhost:8554/usbcam`.
