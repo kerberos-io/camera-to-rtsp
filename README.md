@@ -40,13 +40,12 @@ You'll find the relevant configuration settings (hflip, vlip, etc) in [the sampl
 
 Attach the `rtsp-simple-server.yml` and run the docker command.
     
-    docker run --rm -it \
-    --network=host \
+    docker run --network=host \
     --privileged \
     --tmpfs /dev/shm:exec \
     -v /run/udev:/run/udev:ro \
     -v $PWD/rtsp-simple-server.yml:/rtsp-simple-server.yml \
-    -d --restart-always \
+    -d --restart=always \
     kerberos/rtsp-simple-server:latest-rpi
 
 The stream will be exposed on `rtsp://localhost:8554/rpicam`.
