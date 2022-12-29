@@ -45,6 +45,7 @@ Attach the `rtsp-simple-server.yml` and run the docker command.
     --privileged \
     --tmpfs /dev/shm:exec \
     -v /run/udev:/run/udev:ro \
+    -v $PWD/rtsp-simple-server.yml:/rtsp-simple-server.yml \
     -d --restart-always \
     kerberos/rtsp-simple-server:latest-rpi
 
