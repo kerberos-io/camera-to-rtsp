@@ -9,7 +9,7 @@ This project is initiated due to following issue [New Kerberos Agent: Plans for 
 
 The approach we are following is to convert the camera stream of an USB, RPi or any other camera into a h264 encoded stream. Once done you'll be able to integrate that stream with the [Kerberos Agent](https://github.com/kerberos-io/agent).
 
-So to conclude next to running the Kerberos Agent container, you'll need to run a side car container which will translate your camera specific stream into a readable h264 RTSP connection.
+So to conclude next to running the Kerberos Agent container, you'll need to run a side car container which will translate your camera specific stream into a readable H264 RTSP connection.
 
 ## RTSP Simple Server
 
